@@ -1,16 +1,14 @@
-# Step 1: Build the JAR using Maven
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
+# Step 1: Build the JAR using Maven with Java 21
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
 WORKDIR /app
 
-# Copy the pom.xml and source code
 COPY pom.xml .
 COPY src ./src
 
-# Package the app (skipping tests for faster build)
 RUN mvn clean package -DskipTests
 
-# Step 2: Run the built JAR
-FROM eclipse-temurin:17-jdk
+# Step 2: Run the app with Java 21
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 
